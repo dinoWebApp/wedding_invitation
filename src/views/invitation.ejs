@@ -377,15 +377,36 @@ $(function() {
   intro();
   refreshGif();
 
-$('.gallery_img').on('click', function() {
-  $('.gallery_img_detail_container').css("display", "flex");
-  $('.carousel img').on('load', function() {
+  $('.gallery_img').on('click', function() {
+    $('.gallery_img_detail_container').css("display", "flex");
+
+    // Carousel이 초기화될 때마다 이미지 크기를 체크하고 클래스를 적용하는 함수
+    function applyImageClasses() {
+      $('.carousel-item img').each(function() {
+        let img = $(this);
+        let width = img.width();
+        let height = img.height();
+
+        img.removeClass('gallery_img_hori gallery_img_verti'); // 기존 클래스 제거
+
+        if (width >= height) {
+          img.addClass('gallery_img_hori');
+        } else {
+          img.addClass('gallery_img_verti');
+        }
+      });
+    }
+
+    // Carousel 이미지를 보여주고 초기화
     $('.carousel').show();
     $('#carouselExampleFade').carousel();
-  }).each(function() {
-    if(this.complete) $(this).load(); // 캐시된 이미지 처리
+
+    // 이미지가 로드될 때마다 클래스를 적용
+    $('.carousel-item img').on('load', applyImageClasses);
+
+    // 처음 클릭 시에도 클래스를 바로 적용
+    applyImageClasses();
   });
-});
 
 
 });

@@ -44,7 +44,8 @@ p {
 
 body {
   background-image: url('/assets/images/background/background-paper.png');
-  background-repeat: repeat;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 

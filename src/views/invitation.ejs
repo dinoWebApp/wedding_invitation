@@ -237,13 +237,16 @@
       <% for(let i = 0; i < imgArr.length; i++) {%>
       <div class="col-4 gallery_box">
         <div class="gallery_img_container">
-          <img class="gallery_img" src="/assets/images/gallery/<%=imgArr[i]%>.JPG">     
+          <img class="gallery_img" src="/assets/images/gallery/<%=imgArr[i]%>.JPG" data-id="<%= i %>">
         </div>
       </div>
       <%}%>
     </section>
 
     <section class="gallery_img_detail_container mb-3">
+      <a href="#" class="close-carousel">
+        <i class="fa-solid fa-xmark fs-5" style="color: #eee;"></i>
+      </a>
       <div class="gallery_img_detail">
         <div id="carouselExampleFade"  class="carousel slide carousel-fade w-100">
           <div class="carousel-inner">
@@ -377,9 +380,11 @@ $(function() {
   intro();
   refreshGif();
 
+  let galleryScroll = 0;
   $('.gallery_img').on('click', function() {
-    $('.gallery_img_detail_container').css("display", "flex");
-
+    $('.gallery_img_detail_container').addClass('show');
+    let imgId = $(this).data('id');
+    galleryScroll = $(window).scrollTop();
     // Carousel이 초기화될 때마다 이미지 크기를 체크하고 클래스를 적용하는 함수
     function applyImageClasses() {
       $('.carousel-item img').each(function() {
@@ -406,7 +411,23 @@ $(function() {
 
     // 처음 클릭 시에도 클래스를 바로 적용
     applyImageClasses();
+
+    $('.carousel-item').each(function(){
+      $(this).removeClass('active');
+    });
+
+    $('.carousel-inner').children().eq(imgId).addClass('active');
   });
+
+  $('.close-carousel').on('click', function(){
+    $('.gallery_img_detail_container').removeClass('show');
+    $('.carousel-item img').each(function(){
+      $(this).removeClass('gallery_img_hori gallery_img_verti');
+    })
+    setTimeout(function() {
+      window.scrollTo(0, galleryScroll);
+    }, 0);
+  })
 
 
 });
